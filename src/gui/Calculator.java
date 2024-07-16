@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 
 class close extends WindowAdapter {
 
@@ -29,6 +30,7 @@ class Cal implements ActionListener {
     Button b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17, b18, b19, b20, b21, b22, b23, b24;
     double num1, num2, result;
     String operator;
+    DecimalFormat df;
 
     Cal() {
         Frame f = new Frame();
@@ -124,6 +126,8 @@ class Cal implements ActionListener {
         f.add(p1, BorderLayout.NORTH);
         f.add(p2, BorderLayout.SOUTH);
         f.setVisible(true);
+
+        df = new DecimalFormat("#.##########");
     }
 
     private Button createStyledButton(String text, Color bgColor, Color textColor, Font font) {
@@ -168,22 +172,22 @@ class Cal implements ActionListener {
             } else if (label.equals("=")) {
                 num2 = Double.parseDouble(text);
                 result = calculate(num1, num2, operator);
-                tf.setText(String.valueOf(result));
+                tf.setText(formatResult(result));
                 num1 = result;
             } else if (label.equals("±")) {
                 tf.setText(String.valueOf(-1 * Double.parseDouble(text)));
             } else if (label.equals("%")) {
                 num1 = Double.parseDouble(text) / 100;
-                tf.setText(String.valueOf(num1));
+                tf.setText(formatResult(num1));
             } else if (label.equals("1∕x")) {
                 num1 = 1 / Double.parseDouble(text);
-                tf.setText(String.valueOf(num1));
+                tf.setText(formatResult(num1));
             } else if (label.equals("x²")) {
                 num1 = Math.pow(Double.parseDouble(text), 2);
-                tf.setText(String.valueOf(num1));
+                tf.setText(formatResult(num1));
             } else if (label.equals("²√")) {
                 num1 = Math.sqrt(Double.parseDouble(text));
-                tf.setText(String.valueOf(num1));
+                tf.setText(formatResult(num1));
             }
         }
     }
@@ -205,6 +209,14 @@ class Cal implements ActionListener {
                 }
             default:
                 return 0;
+        }
+    }
+
+    private String formatResult(double result) {
+        if (result == (long) result) {
+            return String.format("%d", (long) result);
+        } else {
+            return df.format(result);
         }
     }
 }
